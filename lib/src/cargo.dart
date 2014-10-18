@@ -1,0 +1,23 @@
+part of bigcargo;
+
+/// Cargo storage backends for client
+const String CARGO_MODE_LOCAL = "localstorage";
+
+abstract class Cargo extends CargoBase with CargoDispatch {
+  Cargo._();
+  /// Create a new cargo storage
+  factory Cargo({CargoModeHolder MODE: CargoMode.MEMORY, Map conf}) {
+      print("Initiating a cargo storage with ${MODE} backend");
+      
+      switch(MODE) {
+        case CargoMode.MEMORY:
+          return new MemoryCargo();
+        case CargoMode.MONGODB:
+          return new MongoCargo(conf!=null ? conf["collection"] : "", conf!=null ? conf["address"] : "");
+        default:
+          Logger.root.warning("Error: Unsupported storage backend \"${MODE}\", supported backends on server is: ${CargoMode.MEMORY} and ${CargoMode.MONGODB}");
+      }
+    }
+  
+}
+
