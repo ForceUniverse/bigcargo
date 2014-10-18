@@ -1,7 +1,7 @@
 name: bigcargo
-version: 0.1.0
+version: 0.1.0+1
 author: Joris Hermans <hermansj@gmail.com>
-description: A key value, storage library for dart
+description: A nosql binder to cargo
 homepage: https://github.com/ForceUniverse/bigcargo
 dependencies:
   cargo: '>=0.4.2 <0.5.0'
