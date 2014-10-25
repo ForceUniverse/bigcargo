@@ -87,8 +87,6 @@ class RedisCargo extends Cargo {
             .then((RedisClient client) {
           
           redis_client = client;
-          
-          //TODO: find a way to get all keys
         
           _completer.complete();
         });
