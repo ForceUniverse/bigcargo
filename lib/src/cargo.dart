@@ -1,8 +1,6 @@
 part of bigcargo;
 
-/// Cargo storage backends for client
-const String CARGO_MODE_LOCAL = "localstorage";
-
+/// Factory class for all the nosql cargo implementations
 abstract class Cargo extends CargoBase with CargoDispatch {
   Cargo._();
   /// Create a new cargo storage
