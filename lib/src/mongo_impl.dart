@@ -58,12 +58,16 @@ class MongoCargo extends Cargo {
     void add(String key, data) {
       List list = new List(); 
       if (keys.contains(key)) {
-        var value = getItemSync(key);
-        if (value is List) {
-          list = value;
-        }
-      }
-      _add(list, key, data);
+        getItem(key).then((value) {
+          if (value is List) {
+              list = value;
+                      
+              _add(list, key, data);
+          }
+          });
+       } else {
+         _add(list, key, data);
+       }
      }
     
     void _add(List list, String key, data) {

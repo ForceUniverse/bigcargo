@@ -2,7 +2,6 @@ part of bigcargo;
 
 class RedisCargo extends Cargo {
     Completer _completer;
-    Set keys = new Set();
     
     RedisClient redis_client;
     
@@ -42,13 +41,19 @@ class RedisCargo extends Cargo {
     
     void add(String key, data) {
       List list = new List(); 
-      if (keys.contains(key)) {
-        var value = getItemSync(key);
-        if (value is List) {
-          list = value;
+      redis_client.exists(key).then((exists) {
+        if (exists) {
+          getItem(key).then((value) {
+            if (value is List) {
+              list = value;
+              
+              _add(list, key, data);
+            }
+          });
+        } else {
+          _add(list, key, data);
         }
-      }
-      _add(list, key, data);
+      });
      }
     
     void _add(List list, String key, data) {
@@ -66,7 +71,7 @@ class RedisCargo extends Cargo {
     }
 
     int length() {
-      return keys.length;
+      throw new UnsupportedError('Redis implementation not ready to use this function!');
     }
     
     Map exportSync() {
@@ -74,7 +79,7 @@ class RedisCargo extends Cargo {
     }
      
     Future<Map> export() {
-      throw new UnsupportedError('MongoDB implementation not ready to use this function!');
+      throw new UnsupportedError('Redis implementation not ready to use this function!');
     }
 
     Future start() {
@@ -82,6 +87,8 @@ class RedisCargo extends Cargo {
             .then((RedisClient client) {
           
           redis_client = client;
+          
+          //TODO: find a way to get all keys
         
           _completer.complete();
         });
