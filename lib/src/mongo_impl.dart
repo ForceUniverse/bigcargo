@@ -84,8 +84,14 @@ class MongoCargo extends Cargo {
       collection.remove();
     }
 
-    int length() {
-      return keys.length;
+    Future<int> length() {
+      Completer completer = new Completer();
+      
+      collection.find().toList().then((List<Map> list) {                
+          completer.complete(list.length);
+      });
+      
+      return completer.future;
     }
     
     Map exportSync() {

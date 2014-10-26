@@ -18,6 +18,13 @@ Or just look at this.
         // do something with the retrieved value!
       });
   	});
+  	
+### Implementations ###
+
+We have implemenations for:
+
+- MongoDB
+- Redis
 
 ### Contributing ###
  

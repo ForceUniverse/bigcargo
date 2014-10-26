@@ -70,8 +70,8 @@ class RedisCargo extends Cargo {
       redis_client.flushdb();
     }
 
-    int length() {
-      throw new UnsupportedError('Redis implementation not ready to use this function!');
+    Future<int> length() {
+      return redis_client.dbsize;
     }
     
     Map exportSync() {
