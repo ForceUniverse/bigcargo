@@ -2,7 +2,7 @@
 
 This file contains highlights of what changes on each version of the cargo package.
 
-#### Pub version 0.1.1+1 & 0.1.1+2 ####
+#### Pub version 0.1.1+1 & 0.1.1+2 & 0.1.1+3 ####
 
 - make mongodb impl better by fixing 'getItem' issue
 
