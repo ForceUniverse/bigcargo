@@ -28,13 +28,13 @@ class MongoCargo extends Cargo {
     Future<dynamic> getItem(String key, {defaultValue}) {
       Completer complete = new Completer();
       Future elem = collection.findOne(where.eq("key", key)).then((Map map) {
-        String value;
+        var value;
         if (map==null||map["value"]==null) {
           value = _setDefaultValue(key, defaultValue);
         } else {
-          value = map["value"];
+          value = JSON.decode(map["value"]);
         }
-        complete.complete(JSON.decode(value));
+        complete.complete(value);
       });
       return complete.future;      
     }
