@@ -1,5 +1,5 @@
 name: bigcargo
-version: 0.1.1
+version: 0.1.1+2
 author: Joris Hermans <hermansj@gmail.com>
 description: A nosql binder to cargo
 homepage: https://github.com/ForceUniverse/bigcargo
