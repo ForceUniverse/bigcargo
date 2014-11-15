@@ -102,7 +102,18 @@ class MongoCargo extends Cargo {
     }
      
     Future<Map> export() {
-      throw new UnsupportedError('MongoDB implementation not ready to use this function!');
+      Completer completer = new Completer<Map>();
+      collection.find().toList().then((List<Map> list) {
+        Map values = new Map();
+        var key, data;
+        for (Map value in list) {
+             key = value["key"];
+             data = value["value"];
+             values["key"] = data; 
+        }
+        completer.complete(values);
+      });
+      return completer.future;
     }
 
     Future start() {
