@@ -40,8 +40,8 @@ class MongoCargo extends Cargo {
     }
 
     void setItem(String key, value) {
-       var data = [];
-       data.add({"key": key, "value": JSON.encode(value)});
+       var data = [], rawData = {"key": key, "value": JSON.encode(value)};
+       data.add(rawData);
        if (keys.contains(key)) {
          Future.forEach(data,
               (elem){
@@ -54,7 +54,7 @@ class MongoCargo extends Cargo {
                          return collection.insert(elem, writeConcern: WriteConcern.ACKNOWLEDGED);
                        });
        }
-       dispatch(key, data);
+       dispatch(key, rawData);
        
     }
     
