@@ -4,7 +4,7 @@ This file contains highlights of what changes on each version of the cargo packa
 
 #### Pub version 0.1.2+1 ####
 
-- Improvements to dispatcher on setItem
+- Improvements to dispatch on setItem, mongo impl
 
 #### Pub version 0.1.2 ####
 
