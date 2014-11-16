@@ -54,7 +54,7 @@ class MongoCargo extends Cargo {
                          return collection.insert(elem, writeConcern: WriteConcern.ACKNOWLEDGED);
                        });
        }
-       dispatch(key, {"key": key, "value": value});
+       dispatch(key, value);
        
     }
     

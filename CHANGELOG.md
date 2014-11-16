@@ -2,9 +2,10 @@
 
 This file contains highlights of what changes on each version of the cargo package.
 
-#### Pub version 0.1.2+2 ####
+#### Pub version 0.1.2+2 & 0.1.2+3 ####
 
 - decode value when doing an export()
+- solve issue on dispatching
 
 #### Pub version 0.1.2+1 ####
 
