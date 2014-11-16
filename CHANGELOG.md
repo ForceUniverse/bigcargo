@@ -2,6 +2,10 @@
 
 This file contains highlights of what changes on each version of the cargo package.
 
+#### Pub version 0.1.2+2 ####
+
+- decode value when doing an export()
+
 #### Pub version 0.1.2+1 ####
 
 - Improvements to dispatch on setItem, mongo impl

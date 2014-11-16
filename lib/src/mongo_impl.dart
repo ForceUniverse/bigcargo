@@ -54,7 +54,7 @@ class MongoCargo extends Cargo {
                          return collection.insert(elem, writeConcern: WriteConcern.ACKNOWLEDGED);
                        });
        }
-       dispatch(key, rawData);
+       dispatch(key, {"key": key, "value": value});
        
     }
     
@@ -109,7 +109,7 @@ class MongoCargo extends Cargo {
         for (Map value in list) {
              key = value["key"];
              data = value["value"];
-             values["key"] = data; 
+             values["key"] = JSON.decode(data); 
         }
         completer.complete(values);
       });
