@@ -2,6 +2,10 @@
 
 This file contains highlights of what changes on each version of the cargo package.
 
+#### Pub version 0.1.3 ####
+
+- adding remove dispatch to bigcargo, so you will receive data change events when something get deleted.
+
 #### Pub version 0.1.2+4 ####
 
 - Fixing bug in export method of mongoDB!

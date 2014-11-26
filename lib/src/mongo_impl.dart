@@ -81,6 +81,7 @@ class MongoCargo extends Cargo {
 
     void removeItem(String key) {
       collection.remove(where.eq("key", key));
+      dispatch_removed(key);
     }
 
     void clear() {

@@ -64,6 +64,7 @@ class RedisCargo extends Cargo {
 
     void removeItem(String key) {
       redis_client.del(key);
+      dispatch_removed(key);
     }
 
     void clear() {
