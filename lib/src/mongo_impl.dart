@@ -5,15 +5,30 @@ class MongoCargo extends Cargo {
     Set keys = new Set();
     
     Db _db;
-    DbCollection collection;
+    DbCollection _collection;
     
-    String collectionName;
     String address;
     
-    MongoCargo(this.collectionName, this.address) : super._() {
+    MongoCargo(this.address, {String collection: "base"}) : super._() {
       _completer = new Completer();
+      this.collection = collection;
     }
 
+    Future withCollection(collection) {
+      this.collection = collection;
+     
+      // reset keys
+      keys.clear();
+      if (_db != null) {
+        _collection = _db.collection(this.collection);
+      }
+      return new Future.value();
+    }
+      
+    CargoBase instanceWithCollection(String collection) {
+      return new MongoCargo(this.address, collection: collection);
+    }
+    
     dynamic getItemSync(String key, {defaultValue}) {
       throw new UnsupportedError('MongoDB is not supporting synchronous retrieval of data, we will add this feature when await key is available in Dart');
     }
@@ -27,7 +42,7 @@ class MongoCargo extends Cargo {
 
     Future<dynamic> getItem(String key, {defaultValue}) {
       Completer complete = new Completer();
-      Future elem = collection.findOne(where.eq("key", key)).then((Map map) {
+      Future elem = _collection.findOne(where.eq("key", key)).then((Map map) {
         var value;
         if (map==null||map["value"]==null) {
           value = _setDefaultValue(key, defaultValue);
@@ -39,19 +54,19 @@ class MongoCargo extends Cargo {
       return complete.future;      
     }
 
-    void setItem(String key, value) {
+    Future setItem(String key, value) {
        var data = [], rawData = {"key": key, "value": JSON.encode(value)};
        data.add(rawData);
        if (keys.contains(key)) {
-         Future.forEach(data,
+        return Future.forEach(data,
               (elem){
-                return collection.update(where.eq("key", key), elem, writeConcern: WriteConcern.ACKNOWLEDGED);
+                return _collection.update(where.eq("key", key), elem, writeConcern: WriteConcern.ACKNOWLEDGED);
               });
        } else { 
          keys.add(key);
-         Future.forEach(data,
+         return Future.forEach(data,
                        (elem){
-                         return collection.insert(elem, writeConcern: WriteConcern.ACKNOWLEDGED);
+                         return _collection.insert(elem, writeConcern: WriteConcern.ACKNOWLEDGED);
                        });
        }
        dispatch(key, value);
@@ -80,18 +95,18 @@ class MongoCargo extends Cargo {
     }
 
     void removeItem(String key) {
-      collection.remove(where.eq("key", key));
+      _collection.remove(where.eq("key", key));
       dispatch_removed(key);
     }
 
     void clear() {
-      collection.remove();
+      _collection.remove();
     }
 
     Future<int> length() {
       Completer completer = new Completer();
       
-      collection.find().toList().then((List<Map> list) {                
+      _collection.find().toList().then((List<Map> list) {                
           completer.complete(list.length);
       });
       
@@ -104,7 +119,7 @@ class MongoCargo extends Cargo {
      
     Future<Map> export() {
       Completer completer = new Completer<Map>();
-      collection.find().toList().then((List<Map> list) {
+      _collection.find().toList().then((List<Map> list) {
         Map values = new Map();
         var key, data;
         for (Map value in list) {
@@ -119,11 +134,11 @@ class MongoCargo extends Cargo {
 
     Future start() {
       _db = new Db(this.address);
-      collection = _db.collection(this.collectionName);
+      _collection = _db.collection(this.collection);
       
       _db.open().then((event) {
         // TODO: retrieve all keys
-        collection.find().toList().then((List<Map> list) {
+        _collection.find().toList().then((List<Map> list) {
           for (Map value in list) {
             keys.add(value["key"]);
           }

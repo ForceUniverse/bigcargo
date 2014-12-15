@@ -2,6 +2,12 @@
 
 This file contains highlights of what changes on each version of the cargo package.
 
+#### Pub version 0.2.0 ####
+
+- update implementation to Cargo 0.5.0
+- improve redis implementation (still experimental)
+- better use of collections
+
 #### Pub version 0.1.3 ####
 
 - adding remove dispatch to bigcargo, so you will receive data change events when something get deleted.

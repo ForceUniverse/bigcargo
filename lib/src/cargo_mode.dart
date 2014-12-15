@@ -4,4 +4,5 @@ class CargoMode  {
   /// all the cargo modes for the client implementations
   static const MONGODB = const CargoModeHolder('mongodb');
   static const MEMORY = const CargoModeHolder('MEMORY');
+  static const REDIS = const CargoModeHolder('REDIS');
 }

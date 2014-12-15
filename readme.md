@@ -8,7 +8,7 @@ For the moment we have only a MongoDB implementation. Please take a look at the 
 
 Or just look at this.
 
-	Cargo storage = new Cargo(MODE: CargoMode.MONGODB, conf: {"collection": "store", "address": "mongodb://127.0.0.1/test" });
+	Cargo storage = new Cargo(MODE: CargoMode.MONGODB, collection: "store", conf: {"address": "mongodb://127.0.0.1/test" });
 
   	storage.start().then((_) {
       storage.clear();
@@ -24,7 +24,7 @@ Or just look at this.
 We have implemenations for:
 
 - MongoDB
-- Redis
+- Redis (experimental)
 
 ### Contributing ###
  

@@ -8,18 +8,19 @@ void main() {
     storage.start().then((_) {
       test('test basic json storage access', () {
         storage.clear();
-        storage["someValue"] = {"value": "go"};
+        
+        Map asyncData = {"as": "go"};
 
-        storage.getItem("someValue").then((value) {
-          expect(value, {"value": "go"});
+        storage.setItem("someValue", asyncData).then((_) {
+            storage.getItem("someValue").then((value) 
+                       => expect(value, asyncData)
+                     );
         });
         
-        storage["adv"] = {"as": "go"};
-
-        storage.getItem("adv").then((value) {
-              test('test async storage', () {
-                expect(value, {"as": "go"});
-              });
+        storage.setItem("adv", {"as": "go"}).then((_) {
+                    storage.getItem("someValue").then((value) 
+                               => expect(value, {"as": "go"})
+                             );
         });
         
         // now update data

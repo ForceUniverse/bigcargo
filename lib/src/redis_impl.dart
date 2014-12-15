@@ -5,11 +5,21 @@ class RedisCargo extends Cargo {
     
     RedisClient redis_client;
     
-    String collectionName;
     String address;
     
-    RedisCargo(this.collectionName, this.address) : super._() {
+    RedisCargo(this.address, {String collection: "base"}) : super._() {
       _completer = new Completer();
+      this.collection = collection;
+    }
+    
+    Future withCollection(collection) {
+      this.collection = collection;
+         
+      return new Future.value();
+    }
+          
+    CargoBase instanceWithCollection(String collection) {
+      return new RedisCargo(this.address, collection: collection);
     }
 
     dynamic getItemSync(String key, {defaultValue}) {
@@ -25,6 +35,7 @@ class RedisCargo extends Cargo {
 
     Future<dynamic> getItem(String key, {defaultValue}) {
       Completer complete = new Completer();
+      key = "$collection$key";
       Future elem = redis_client.get(key).then((value) {
         if (value==null) {
           value = _setDefaultValue(key, defaultValue);
@@ -34,13 +45,20 @@ class RedisCargo extends Cargo {
       return complete.future;      
     }
 
-    void setItem(String key, value) {
-       redis_client.set(key, JSON.encode(value));
-       dispatch(key, value);
+    Future setItem(String key, value) {
+       key = "$collection$key";
+       return _setItem(key, value);
+    }
+    
+    Future _setItem(String key, value) {
+       return redis_client.set(key, JSON.encode(value)).then((_) {
+         dispatch(key, value);
+       });
     }
     
     void add(String key, data) {
-      List list = new List(); 
+      List list = new List();
+      key = "$collection$key";
       redis_client.exists(key).then((exists) {
         if (exists) {
           getItem(key).then((value) {
@@ -59,10 +77,16 @@ class RedisCargo extends Cargo {
     void _add(List list, String key, data) {
         list.add(data);
         
-        setItem(key, list);
+        _setItem(key, list);
     }
 
     void removeItem(String key) {
+      key = "$collection$key";
+      _removeItem(key);
+    }
+        
+    
+    void _removeItem(String key) {
       redis_client.del(key);
       dispatch_removed(key);
     }
@@ -88,6 +112,7 @@ class RedisCargo extends Cargo {
             .then((RedisClient client) {
           
           redis_client = client;
+          //redis_client.
         
           _completer.complete();
         });
