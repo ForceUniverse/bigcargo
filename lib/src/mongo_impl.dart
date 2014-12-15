@@ -2,14 +2,13 @@ part of bigcargo;
 
 class MongoCargo extends Cargo {
     Completer _completer;
-    Set keys = new Set();
     
     Db _db;
     DbCollection _collection;
     
     String address;
     
-    MongoCargo(this.address, {String collection: "base", Db db}) : super._() {
+    MongoCargo(this.address, {String collection: "base", Db db, Set keys}) : super._() {
       _completer = new Completer();
       this.collection = collection;
       this._db = db;
@@ -22,8 +21,6 @@ class MongoCargo extends Cargo {
     Future withCollection(collection) {
       this.collection = collection;
      
-      // reset keys
-      keys.clear();
       if (_db != null) {
         _collection = _db.collection(this.collection);
       }
@@ -62,37 +59,48 @@ class MongoCargo extends Cargo {
     Future setItem(String key, value) {
        var data = [], rawData = {"key": key, "value": JSON.encode(value)};
        data.add(rawData);
-       if (keys.contains(key)) {
-        return Future.forEach(data,
-              (elem){
-                return _collection.update(where.eq("key", key), elem, writeConcern: WriteConcern.ACKNOWLEDGED);
-              }).then((_) {
-          dispatch(key, value);      
-        });
-       } else { 
-         keys.add(key);
-         return Future.forEach(data,
-                       (elem){
-                         return _collection.insert(elem, writeConcern: WriteConcern.ACKNOWLEDGED);
-                       }).then((_) {
-           dispatch(key, value);      
-         });
-       }
+       return _exists(key).then((bool exists) {
+         if (exists) {
+          return Future.forEach(data,
+                (elem){
+                  return _collection.update(where.eq("key", key), elem, writeConcern: WriteConcern.ACKNOWLEDGED);
+                }).then((_) {
+            dispatch(key, value);      
+          });
+         } else { 
+           return Future.forEach(data,
+                         (elem){
+                           return _collection.insert(elem, writeConcern: WriteConcern.ACKNOWLEDGED);
+                         }).then((_) {
+             dispatch(key, value);      
+           });
+         }
+       });
+    }
+    
+    Future _exists(String key) {
+      Completer<bool> complete = new Completer<bool>(); 
+      _collection.findOne(where.eq("key", key)).then((Map value) {
+        complete.complete(value!=null);
+      });
+      return complete.future;
     }
     
     void add(String key, data) {
-      List list = new List(); 
-      if (keys.contains(key)) {
-        getItem(key).then((value) {
-          if (value is List) {
-              list = value;
-                      
-              _add(list, key, data);
-          }
-          });
-       } else {
-         _add(list, key, data);
-       }
+      List list = new List();
+      _exists(key).then((bool exists) {
+          if (exists) {
+            getItem(key).then((value) {
+              if (value is List) {
+                  list = value;
+                          
+                  _add(list, key, data);
+              }
+              });
+           } else {
+             _add(list, key, data);
+           }
+      });
      }
     
     void _add(List list, String key, data) {
@@ -144,15 +152,7 @@ class MongoCargo extends Cargo {
       _collection = _db.collection(this.collection);
       
       _db.open().then((event) {
-        // TODO: retrieve all keys
-        _collection.find().toList().then((List<Map> list) {
-          for (Map value in list) {
-            keys.add(value["key"]);
-          }
-          
-          _completer.complete();
-        });
-        
+        _completer.complete();
       });
       return _completer.future;
     }
