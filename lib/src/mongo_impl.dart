@@ -13,6 +13,10 @@ class MongoCargo extends Cargo {
       _completer = new Completer();
       this.collection = collection;
       this._db = db;
+      
+      if (_db != null) {
+          _collection = _db.collection(this.collection);
+      }
     }
 
     Future withCollection(collection) {
