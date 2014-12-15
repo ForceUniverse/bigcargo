@@ -9,9 +9,10 @@ class MongoCargo extends Cargo {
     
     String address;
     
-    MongoCargo(this.address, {String collection: "base"}) : super._() {
+    MongoCargo(this.address, {String collection: "base", Db db}) : super._() {
       _completer = new Completer();
       this.collection = collection;
+      this._db = db;
     }
 
     Future withCollection(collection) {
@@ -26,7 +27,7 @@ class MongoCargo extends Cargo {
     }
       
     CargoBase instanceWithCollection(String collection) {
-      return new MongoCargo(this.address, collection: collection);
+      return new MongoCargo(this.address, collection: collection, db: _db);
     }
     
     dynamic getItemSync(String key, {defaultValue}) {
