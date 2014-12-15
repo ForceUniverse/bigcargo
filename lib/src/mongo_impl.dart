@@ -66,16 +66,18 @@ class MongoCargo extends Cargo {
         return Future.forEach(data,
               (elem){
                 return _collection.update(where.eq("key", key), elem, writeConcern: WriteConcern.ACKNOWLEDGED);
-              });
+              }).then((_) {
+          dispatch(key, value);      
+        });
        } else { 
          keys.add(key);
          return Future.forEach(data,
                        (elem){
                          return _collection.insert(elem, writeConcern: WriteConcern.ACKNOWLEDGED);
-                       });
+                       }).then((_) {
+           dispatch(key, value);      
+         });
        }
-       dispatch(key, value);
-       
     }
     
     void add(String key, data) {
