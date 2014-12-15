@@ -140,7 +140,7 @@ class MongoCargo extends Cargo {
         for (Map value in list) {
              key = value["key"];
              data = value["value"];
-             values[key] = JSON.decode(data); 
+             values[key] = data; 
         }
         completer.complete(values);
       });
