@@ -2,6 +2,10 @@
 
 This file contains highlights of what changes on each version of the cargo package.
 
+#### Pub version 0.2.0+1 ####
+
+- fix some small issues with mongodb implementation
+
 #### Pub version 0.2.0 ####
 
 - update implementation to Cargo 0.5.0

@@ -49,7 +49,7 @@ class MongoCargo extends Cargo {
         if (map==null||map["value"]==null) {
           value = _setDefaultValue(key, defaultValue);
         } else {
-          value = JSON.decode(map["value"]);
+          value = map["value"];
         }
         complete.complete(value);
       });
@@ -57,7 +57,7 @@ class MongoCargo extends Cargo {
     }
 
     Future setItem(String key, value) {
-       var data = [], rawData = {"key": key, "value": JSON.encode(value)};
+       var data = [], rawData = {"key": key, "value": value};
        data.add(rawData);
        return _exists(key).then((bool exists) {
          if (exists) {
