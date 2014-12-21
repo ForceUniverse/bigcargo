@@ -2,6 +2,14 @@
 
 This file contains highlights of what changes on each version of the cargo package.
 
+#### Pub version 0.2.2 ####
+
+- adapt to cargo 0.5.1, add Map params to export
+
+#### Pub version 0.2.1 ####
+
+- fix mongodb issues
+
 #### Pub version 0.2.0+1 ####
 
 - fix some small issues with mongodb implementation
