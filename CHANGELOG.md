@@ -2,6 +2,10 @@
 
 This file contains highlights of what changes on each version of the cargo package.
 
+#### Pub version 0.2.3+1 ####
+
+- Fix issues with export function
+
 #### Pub version 0.2.3 ####
 
 - Update to latest cargo version 0.6.0

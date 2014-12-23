@@ -160,7 +160,11 @@ class MongoCargo extends Cargo {
       for (var key in params.keys) {
            var value = params[key];
            if (value is Map) {
-             selectorBuilder.and(_paramsBuilding("$field.$key", value));
+             if (selectorBuilder == null) {
+                selectorBuilder = _paramsBuilding("$field.$key", value);
+             } else {
+                selectorBuilder.and(_paramsBuilding("$field.$key", value));
+             }
            } else {
              if (selectorBuilder == null) {
                  selectorBuilder = where.eq("$field.$key", value);
