@@ -1,12 +1,13 @@
 name: bigcargo
-version: 0.2.2
+version: 0.2.3
 author: Joris Hermans <hermansj@gmail.com>
 description: A nosql binder to cargo
 homepage: https://github.com/ForceUniverse/bigcargo
 dependencies:
-  cargo: '>=0.5.1 <0.6.0'
+  cargo: '>=0.6.0 <0.7.0'
   logging: '>=0.9.0 <0.10.0'
   mongo_dart: '>=0.1.44 <0.2.0'
   redis_client: '>=0.1.13 <0.2.0'
 dev_dependencies:
-  unittest: '>=0.10.0 <0.10.1'
+  unittest: '>=0.11.3 <0.11.4'
+  scheduled_test: '>=0.11.4 <0.12.0'

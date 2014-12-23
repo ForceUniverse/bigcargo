@@ -114,8 +114,8 @@ class MongoCargo extends Cargo {
       dispatch_removed(key);
     }
 
-    void clear() {
-      _collection.remove();
+    Future clear() {
+      return _collection.remove();
     }
 
     Future<int> length() {
@@ -139,7 +139,7 @@ class MongoCargo extends Cargo {
       if (params==null) {
         cursor = _collection.find();
       } else {
-        cursor = _collection.find({'value': params});
+        cursor = _collection.find(_paramsBuilding('value', params));
       }
       
       cursor.toList().then((List<Map> list) {
@@ -153,6 +153,23 @@ class MongoCargo extends Cargo {
         completer.complete(values);
       });
       return completer.future;
+    }
+    
+    SelectorBuilder _paramsBuilding(String field, Map params) {
+      SelectorBuilder selectorBuilder;
+      for (var key in params.keys) {
+           var value = params[key];
+           if (value is Map) {
+             selectorBuilder.and(_paramsBuilding("$field.$key", value));
+           } else {
+             if (selectorBuilder == null) {
+                 selectorBuilder = where.eq("$field.$key", value);
+             } else {
+                 selectorBuilder.and(where.eq("$field.$key", value));
+             }
+           }
+      }
+      return selectorBuilder;
     }
 
     Future start() {

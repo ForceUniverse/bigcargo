@@ -3,7 +3,7 @@ import 'package:bigcargo/bigcargo.dart';
 
 void main() {
   // First tests!
-  Cargo storage = new Cargo(MODE: CargoMode.MONGODB, conf: {"collection": "store", "address": "mongodb://127.0.0.1/test" });
+  Cargo storage = new Cargo(MODE: CargoMode.MONGODB, collection: "store", conf: { "address": "mongodb://127.0.0.1/test" });
 
     storage.start().then((_) {
       test('test basic json storage access', () {

@@ -91,8 +91,8 @@ class RedisCargo extends Cargo {
       dispatch_removed(key);
     }
 
-    void clear() {
-      redis_client.flushdb();
+    Future clear() {
+      return redis_client.flushdb();
     }
 
     Future<int> length() {
