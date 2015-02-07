@@ -99,11 +99,11 @@ class RedisCargo extends Cargo {
       return redis_client.dbsize;
     }
     
-    Map exportSync({Map params}) {
+    Map exportSync({Map params, Options options}) {
       throw new UnsupportedError('Redis implementation not ready to use this function!');
     }
      
-    Future<Map> export({Map params}) {
+    Future<Map> export({Map params, Options options}) {
       throw new UnsupportedError('Redis implementation not ready to use this function!');
     }
 
