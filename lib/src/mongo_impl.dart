@@ -138,17 +138,18 @@ class MongoCargo extends Cargo {
       Cursor cursor;
       if (params==null) {
         // limit checking
-        if (options!=null && options.hasLimit()) {
-            cursor = _collection.find(where.limit(options.limit));
+        if (options!=null && (options.hasLimit() || options.revert)) {
+           
+            cursor = _collection.find(_checkOptions(where, options));
         } else {
             cursor = _collection.find();
         }
       } else {
         SelectorBuilder selectorBuilder = _paramsBuilding('value', params);
-        if (options!=null && options.hasLimit()) {
-            selectorBuilder.limit(options.limit);
+        if (options!=null) {
+          selectorBuilder = _checkOptions(selectorBuilder, options);
         }
-        cursor = _collection.find(_paramsBuilding('value', params));
+        cursor = _collection.find(selectorBuilder);
       }
      
       cursor.toList().then((List<Map> list) {
@@ -162,6 +163,18 @@ class MongoCargo extends Cargo {
         completer.complete(values);
       });
       return completer.future;
+    }
+    
+    SelectorBuilder _checkOptions(SelectorBuilder selectorBuilder, Options options) {
+      if (options!=null) {
+         if (options.revert) {
+             selectorBuilder.sortBy("_id", descending: options.revert);
+         }
+         if (options.hasLimit()) {
+             selectorBuilder.limit(options.limit);
+         }         
+      }
+      return selectorBuilder;
     }
     
     SelectorBuilder _paramsBuilding(String field, Map params) {
