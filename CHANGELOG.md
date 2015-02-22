@@ -2,6 +2,11 @@
 
 This file contains highlights of what changes on each version of the cargo package.
 
+#### Pub version 0.2.5 ####
+
+- Update to latest Cargo version
+- Add revert options to export data from MongoDB
+
 #### Pub version 0.2.4 ####
 
 - Update to latest Cargo version
