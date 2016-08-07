@@ -2,6 +2,10 @@
 
 This file contains highlights of what changes on each version of the cargo package.
 
+#### Pub version 0.2.6 ####
+
+- Update to latest Cargo & mongo_dart version
+
 #### Pub version 0.2.5 ####
 
 - Update to latest Cargo version
