@@ -6,7 +6,7 @@ homepage: https://github.com/ForceUniverse/bigcargo
 dependencies:
   cargo: '>=0.8.0 <0.9.0'
   logging: '>=0.11.0 <0.12.0'
-  mongo_dart: '>=0.2.9 <0.3.0'
+  mongo_dart: '^0.2.9'
   redis_client: '>=0.1.13 <0.2.0'
 dev_dependencies:
   unittest: '>=0.11.3 <0.11.4'
